@@ -60,3 +60,91 @@ You'll also need to install the lib-audio-mp3 repository from this account for t
         and print OUT $buff_out;
     $lame -> update_xing( \*OUT );
     close OUT;
+
+## Methods
+
+### new()
+
+Instantiates a new Nick::Audio::LAME object.
+
+Arguments are interpreted as a hash.
+
+There are two mandatory keys.
+
+- sample\_rate
+
+    Sample rate of PCM data.
+
+- channels
+
+    Number of audio channels.
+
+The rest are optional.
+
+- buffer\_in
+
+    Scalar that'll be used to pull PCM data from.
+
+- buffer\_out
+
+    Scalar that'll be used to push encoded MP3 frames to.
+
+- no\_xing\_header
+
+    Whether data will be collected to be written to a XING header at the end.
+
+    If you dont call **make\_xing()** or **make\_xing()** this is a waste of effort.
+
+    Defaults to false (i.e. collect the data).
+
+- cbr
+
+    Indicates the file should be encoded constant bitrate
+
+    The value should be the target bitrate.
+
+    Valid: 8, 16, 24, 32, 40, 48, 64, 80, 96, 112, 128, 160, 192, 224, 256, or 320.
+
+- vbr
+
+    Indicates the file should be encoded variable bitrate
+
+    The value should be the quality between 0 and 9 (0 being highest quality).
+
+- quality
+
+    Internal algorithm selection.
+
+    Effects quality by selecting expensive or cheap algorithms.
+
+    The value should be between 0 and 9 (0 being highest quality).
+
+### compress()
+
+Compresses PCM audio data from **buffer\_in**, possibly writing encoded MP3 frames to **buffer\_out**.
+
+Returns the number of bytes of MP3 data written to buffer\_out.
+
+### flush()
+
+Flushes any remaining data LAME has buffered internally, possibly writing encoded MP3 frames to **buffer\_out**.
+
+Returns the number of bytes of data written to buffer\_out.
+
+### update\_xing()
+
+Given a filehandle as an argument, updates the XING header at the beginning of the file.
+
+### make\_xing()
+
+Builds a XING header and places it in **buffer\_out**.
+
+Returns the number of bytes of data written to buffer\_out.
+
+### get\_frame\_num()
+
+Returns the number of frames encoded so far.
+
+### get\_samples\_to\_encode()
+
+Returns the number of PCM samples buffered, but not yet encoded to MP3 data.
